@@ -61,8 +61,12 @@ gulp.task('index-dist', ['revision-assets'], function() {
     var assetManifests = gulp.src(distDir + assetsManifestFileName);
     var minifiedCssManifest = gulp.src(distDir + cssManifestFileName);
     return gulp.src([webAppDir + 'index.html'])
-         .pipe(revReplace({manifest: assetManifests}))
-        .pipe(useref({}, lazypipe().pipe(sourcemaps.init, { loadMaps: true })))
+        .pipe(revReplace({manifest: assetManifests}))
+        .pipe(useref({
+            transformPath: function(filePath) {
+                return filePath.replace('student.css', 'student.less');
+            }
+        }, lazypipe().pipe(sourcemaps.init, { loadMaps: true })))
         .pipe(jsFilter)
         .pipe(ngAnnotate())
         .pipe(uglify())
