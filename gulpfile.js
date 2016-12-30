@@ -3,6 +3,7 @@ var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var proxyMiddleware = require('http-proxy-middleware');
 var modRewrite = require('connect-modrewrite');
+var del = require('del');
 
 var sourcemaps = require('gulp-sourcemaps');
 var less = require("gulp-less");
@@ -13,6 +14,13 @@ var minifyCss = require('gulp-minify-css');
 
 gulp.task('default', [], function() {
 
+});
+
+var webAppDir = './webapp/';
+var distDir = './dist/';
+
+gulp.task('clean-dist', [], function () {
+    return del([distDir+'**'], {force: true});
 });
 
 gulp.task('less-dev', [], function() {
