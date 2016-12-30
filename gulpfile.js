@@ -7,6 +7,10 @@ var modRewrite = require('connect-modrewrite');
 var sourcemaps = require('gulp-sourcemaps');
 var less = require("gulp-less");
 
+var rev = require('gulp-rev');
+var revReplace = require("gulp-rev-replace");
+var minifyCss = require('gulp-minify-css');
+
 gulp.task('default', [], function() {
 
 });
@@ -15,6 +19,7 @@ gulp.task('less-dev', [], function() {
     return gulp.src('./webapp/student.less')
         .pipe(sourcemaps.init())
         .pipe(less())
+        .pipe(minifyCss())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dev/'));
 
