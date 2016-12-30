@@ -42,19 +42,19 @@ gulp.task('revision-assets', ['clean-dist'], function() {
         .pipe(gulp.dest(distDir));
 });
 
-var cssManifestFileName = "css-manifest.json";
-gulp.task('less-dist', ['clean-dist'], function() {
-    return gulp.src(webAppDir + 'student.less')
-        .pipe(sourcemaps.init())
-        .pipe(less())
-        .pipe(minifyCss())
-        .pipe(rev())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(distDir))
-        .pipe(rev.manifest(cssManifestFileName, {base: '.', merge: true}))
-        .pipe(gulp.dest(distDir));
-
-});
+// -- * UNUSED * --
+// var cssManifestFileName = "css-manifest.json";
+// gulp.task('less-dist', ['clean-dist'], function() {
+//     return gulp.src(webAppDir + 'student.less')
+//         .pipe(sourcemaps.init())
+//         .pipe(less())
+//         .pipe(minifyCss())
+//         .pipe(rev())
+//         .pipe(sourcemaps.write('.'))
+//         .pipe(gulp.dest(distDir))
+//         .pipe(rev.manifest(cssManifestFileName, {base: '.', merge: true}))
+//         .pipe(gulp.dest(distDir));
+// });
 
 gulp.task('ngCacheTemplates', ['revision-assets'], function() {
     var assetManifests = gulp.src(distDir + assetsManifestFileName);
@@ -76,7 +76,7 @@ gulp.task('index-dist', ['revision-assets', 'ngCacheTemplates'], function() {
     var notIndexFilter = filter(['**/*', '!**/index.html'], {restore: true});
 
     var assetManifests = gulp.src(distDir + assetsManifestFileName);
-    var minifiedCssManifest = gulp.src(distDir + cssManifestFileName);
+
     return gulp.src([webAppDir + 'index.html'])
         .pipe(revReplace({manifest: assetManifests}))
         .pipe(useref({
