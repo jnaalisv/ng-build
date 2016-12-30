@@ -7,12 +7,16 @@
 
     function CommonService() {
         var api = {
-            helloWorld: helloWorld
+            helloWorld: helloWorld,
+            getGreeting: getGreeting,
         };
 
         function helloWorld() {
-            console.log('hello world');
             return 'CommonSays: hello, world!'
+        }
+
+        function getGreeting() {
+            return 'Hello Hello, '
         }
 
         return api;
