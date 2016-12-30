@@ -45,6 +45,18 @@ gulp.task('less-dist', ['clean-dist'], function() {
         .pipe(gulp.dest(distDir));
 
 });
+
+gulp.task('index-dist', ['revision-assets', 'less-dist'], function() {
+
+    var assetManifests = gulp.src(distDir + assetsManifestFileName);
+    var minifiedCssManifest = gulp.src(distDir + cssManifestFileName);
+    return gulp.src([webAppDir + 'index.html'])
+        .pipe(revReplace({manifest: assetManifests}))
+        .pipe(revReplace({manifest: minifiedCssManifest}))
+        .pipe(gulp.dest(distDir));
+
+});
+
 gulp.task('less-dev', [], function() {
     return gulp.src(webAppDir + 'student.less')
         .pipe(sourcemaps.init())
