@@ -23,8 +23,30 @@ gulp.task('clean-dist', [], function () {
     return del([distDir+'**'], {force: true});
 });
 
+var assetsManifestFileName = "assets-manifest.json";
+gulp.task('revision-assets', ['clean-dist'], function() {
+    return gulp.src([webAppDir + "/assets/**"]) // css?
+        .pipe(rev())
+        .pipe(gulp.dest(distDir))
+        .pipe(rev.manifest(assetsManifestFileName, {base: process.cwd(), merge: true}))
+        .pipe(gulp.dest(distDir));
+});
+
+var cssManifestFileName = "css-manifest.json";
+gulp.task('less-dist', ['clean-dist'], function() {
+    return gulp.src(webAppDir + 'student.less')
+        .pipe(sourcemaps.init())
+        .pipe(less())
+        .pipe(minifyCss())
+        .pipe(rev())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(distDir))
+        .pipe(rev.manifest(cssManifestFileName, {base: '.', merge: true}))
+        .pipe(gulp.dest(distDir));
+
+});
 gulp.task('less-dev', [], function() {
-    return gulp.src('./webapp/student.less')
+    return gulp.src(webAppDir + 'student.less')
         .pipe(sourcemaps.init())
         .pipe(less())
         .pipe(minifyCss())
@@ -33,7 +55,7 @@ gulp.task('less-dev', [], function() {
 
 });
 
-gulp.task('serve', ['less-dev'], function() {
+gulp.task('serve-dev', ['less-dev'], function() {
     var middleWares = [];
 
     var proxyOptions = {
@@ -67,40 +89,4 @@ gulp.task('serve', ['less-dev'], function() {
             middleware: middleWares
         }
     });
-});
-
-gulp.task('serve-dist', ['dist'], function() {
-    var middleWares = [];
-
-    var proxyOptions = {
-        target: "http://localhost:8080",
-        changeOrigin: true,
-        ws: false,
-        secure: false
-    };
-
-    proxyOptions.target = 'http://localhost:8080';
-
-    middleWares.push(proxyMiddleware('/backend/', proxyOptions));
-    middleWares.push(modRewrite(['^/(student)/[^\\.]*$ /$1/index.html [L]']));
-
-    browserSync.init({
-        notify: false,
-        ui: false,
-        port: 9090,
-        startPath: '/student',
-        server: {
-            baseDir: ['.'],
-            routes: {
-                // '/teacher': '../frontend-teacher/target/classes/dist',
-                '/student': 'dist',
-                '/student/universityConfig.js': '../config/otm-common/universityConfig.js',
-            },
-            middleware: middleWares
-        }
-    });
-});
-
-gulp.task('dist', [], function() {
-
 });
