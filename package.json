@@ -1,0 +1,14 @@
+{
+  "name": "ng-build",
+  "version": "1.0.0",
+  "description": "ng buildausta",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "juho naalisvaara",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
