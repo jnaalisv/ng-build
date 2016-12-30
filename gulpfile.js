@@ -4,11 +4,23 @@ var browserSync = require('browser-sync');
 var proxyMiddleware = require('http-proxy-middleware');
 var modRewrite = require('connect-modrewrite');
 
+var sourcemaps = require('gulp-sourcemaps');
+var less = require("gulp-less");
+
 gulp.task('default', [], function() {
 
 });
 
-gulp.task('serve', [], function() {
+gulp.task('less-dev', [], function() {
+    return gulp.src('./webapp/student.less')
+        .pipe(sourcemaps.init())
+        .pipe(less())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./dev/'));
+
+});
+
+gulp.task('serve', ['less-dev'], function() {
     var middleWares = [];
 
     var proxyOptions = {
@@ -33,6 +45,10 @@ gulp.task('serve', [], function() {
             routes: {
                 // '/teacher': '../frontend-teacher/target/classes/dist',
                 '/student': 'webapp',
+
+                '/student/student.css': 'dev/student.css',
+                '/student/student.css.map': 'dev/student.css.map',
+
                 '/student/universityConfig.js': '../config/otm-common/universityConfig.js',
             },
             middleware: middleWares
