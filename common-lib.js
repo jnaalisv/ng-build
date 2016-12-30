@@ -12,6 +12,7 @@
 
         function helloWorld() {
             console.log('hello world');
+            return 'CommonSays: hello, world!'
         }
 
         return api;
